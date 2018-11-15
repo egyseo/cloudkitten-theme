@@ -68,184 +68,184 @@ function output_employment_education( $key ) { ?>
 
 ?>
 	
-	<article <?php post_class( 'loop-single' ); ?>>
-		
-		<header class="loop-header">
-			<?php the_title( '<h1 class="loop-title">', '</h1>' ); ?>
-		</header>
-		
-		<div class="loop-body">
-			
-			<?php if ( has_post_thumbnail() ) { ?>
-				<div class="loop-image">
-					<a href="<?php the_permalink(); ?>"><?php the_post_thumbnail(); ?></a>
-				</div>
-			<?php } ?>
-			
-			<div class="loop-content">
-				<?php the_content(); ?>
-			</div>
-			
-			<?php
-			if ( ! post_password_required() ) :
-				?>
+	<div class="inside site-content">
+		<main id="main">
+			<article <?php post_class( 'loop-single' ); ?>>
 				
-				<div id="page-anchors" class="page-anchors">
-					<ul class="page-anchors-list">
-						<?php
-						$sections = array( 'Experience', 'Skills', 'Testimonials', 'Portfolio', 'Education', 'Personal', 'Contact' );
-						foreach ( $sections as $section ) {
-							$lower = strtolower( $section );
-							echo '<li><a href="#' . $lower . '">' . do_shortcode( '[svg src="icons/icon-' . $lower . '.svg"]' ) . $section . '</a></li>';
-						}
+				<div class="loop-body">
+					
+					<div class="loop-content">
+						<?php the_title( '<h1 class="loop-title">', '</h1>' ); ?>
+						<?php the_content(); ?>
+					</div>
+					
+					<?php
+					if ( ! post_password_required() ) :
 						?>
-					</ul>
-				</div>
-				
-				<?php
-				if ( have_rows( 'employment' ) ):
-					echo '<h2 id="experience">Experience</h2>';
-					output_employment_education( 'employment' );
-					/*if ( get_field( "employment_footer" ) ) {
-						?>
-						<div class="job-footer">
-							<?php the_field( "employment_footer" ) ?>
+						
+						<div id="page-anchors" class="page-anchors">
+							<ul class="page-anchors-list">
+								<?php
+								$sections = array( 'Experience', 'Skills', 'Testimonials', 'Portfolio', 'Education', 'Personal', 'Contact' );
+								foreach ( $sections as $section ) {
+									$lower = strtolower( $section );
+									echo '<li><a href="#' . $lower . '">' . do_shortcode( '[svg src="icons/icon-' . $lower . '.svg"]' ) . $section . '</a></li>';
+								}
+								?>
+							</ul>
 						</div>
+						
 						<?php
-					}*/
-				endif;
-				
-				if ( have_rows( 'portfolio_skills' ) ): ?>
-					<h2 id="skills">Skills</h2>
-					<div class="portfolio-skills">
-						<?php while( have_rows( 'portfolio_skills' ) ) : the_row(); ?>
-							<div class="skill">
-								<h3 class="h4">
-									<?php echo do_shortcode( get_sub_field( 'title' ) ); ?>
-								</h3>
-								<div class="desc">
-									<?php echo get_sub_field( 'content' ); ?>
+						if ( have_rows( 'employment' ) ):
+							echo '<h2 id="experience">Experience</h2>';
+							output_employment_education( 'employment' );
+							/*if ( get_field( "employment_footer" ) ) {
+								?>
+								<div class="job-footer">
+									<?php the_field( "employment_footer" ) ?>
 								</div>
-							</div>
-						<?php endwhile; ?>
-					</div>
-				<?php
-				
-				endif;
-				
-				if ( have_rows( 'portfolio_testimonials' ) ):
-					?>
-					<h2 id="testimonials">Testimonials</h2>
-					<div class="portfolio-testimonials">
-						<?php while( have_rows( 'portfolio_testimonials' ) ) : the_row(); ?>
-							<div class="testimonial">
-								<div class="desc">
-									<?php the_sub_field( 'feedback' ); ?>
-								</div>
-								<div class="source">
-									<?php if ( $image = get_sub_field( 'photo' ) ) : ?>
-										<img src="<?php echo $image['url']; ?>" alt="<?php the_sub_field( 'name' ); ?>" />
-									<?php endif; ?>
-									<h3 class="h4"><?php the_sub_field( 'name' ); ?></h3>
-									<div class="company"><?php the_sub_field( 'company' ); ?></div>
-								</div>
-							</div>
-						<?php endwhile; ?>
-					</div>
-				<?php endif; ?>
-				
-				<div id="portfolio" class="portfolio-projects">
-					<?php if ( have_rows( 'portfolio_highlights' ) ): ?>
-						<h2>Portfolio</h2>
-						<div class="projects-wrapper">
-							<?php while( have_rows( 'portfolio_highlights' ) ) : the_row(); ?>
-								<div class="portfolio-project">
-									<?php
-									$image = get_sub_field( 'thumbnail' );
-									$url   = get_sub_field( 'url' );
-									$host  = parse_url( $url )['host'];
-									if ( substr( $host, 0, 4 ) == 'www.' ) {
-										$host = substr( $host, 4 );
-									}
-									?>
-									<div class="project-top">
-										<div class="project-thumb">
-											<?php if ( $cheapskate ): ?>
-												<img src="https://loremflickr.com/400/280" />
-											<?php else: ?>
-												<img src="<?php echo $image['url']; ?>" alt="<?php the_sub_field( 'title' ); ?>" />
-											<?php endif; ?>
-										</div>
-										<div class="project-details">
-											<a target="_blank" class="vertical-center" href="<?php echo $url; ?>" rel="nofollow external"><?php echo $host; ?> &rarr;</a>
+								<?php
+							}*/
+						endif;
+						
+						if ( have_rows( 'portfolio_skills' ) ): ?>
+							<h2 id="skills">Skills</h2>
+							<div class="portfolio-skills">
+								<?php while( have_rows( 'portfolio_skills' ) ) : the_row(); ?>
+									<div class="skill">
+										<h3 class="h4">
+											<?php echo do_shortcode( get_sub_field( 'title' ) ); ?>
+										</h3>
+										<div class="desc">
+											<?php echo get_sub_field( 'content' ); ?>
 										</div>
 									</div>
-									<div class="project-desc">
-										<h3><a target="_blank" href="<?php echo $url; ?>" rel="nofollow external"><?php the_sub_field( 'title' ); ?></a></h3>
-										<p><?php the_sub_field( 'description' ); ?></p>
-									</div>
-								</div>
-							<?php endwhile; ?>
-						</div>
-					<?php endif; ?>
-					
-					<?php if ( get_field( 'additional_websites' ) ): ?>
-						<div class="more-projects-wrapper">
-							<h3>Other Websites</h3>
-							<div class="portfolio-more-projects">
-								<?php the_field( 'additional_websites' ); ?>
+								<?php endwhile; ?>
 							</div>
-						</div>
-					<?php endif; ?>
-				
-				</div>
-				
-				<?php
-				if ( have_rows( 'education' ) ):
-					echo '<h2 id="education">Education</h2>';
-					output_employment_education( 'education' );
-				endif;
-				
-				if ( get_field( 'portfolio_personal' ) ):
-					
-					?>
-					<h2 id="personal">Personal</h2>
-					<div class="portfolio-personal">
 						<?php
-						the_field( 'portfolio_personal' );
-						if ( have_rows( "portfolio_personal_events" ) ) {
+						
+						endif;
+						
+						if ( have_rows( 'portfolio_testimonials' ) ):
 							?>
-							<div class="personal-events">
-								<?php while( have_rows( "portfolio_personal_events" ) ) {
-									the_row(); ?>
-									<div class="personal-event">
-										<div class="year"><?php the_sub_field( 'year' ); ?></div>
-										<div class="desc"><?php the_sub_field( 'desc' ); ?></div>
+							<h2 id="testimonials">Testimonials</h2>
+							<div class="portfolio-testimonials">
+								<?php while( have_rows( 'portfolio_testimonials' ) ) : the_row(); ?>
+									<div class="testimonial">
+										<div class="desc">
+											<?php the_sub_field( 'feedback' ); ?>
+										</div>
+										<div class="source">
+											<?php if ( $image = get_sub_field( 'photo' ) ) : ?>
+												<img src="<?php echo $image['url']; ?>" alt="<?php the_sub_field( 'name' ); ?>" />
+											<?php endif; ?>
+											<h3 class="h4"><?php the_sub_field( 'name' ); ?></h3>
+											<div class="company"><?php the_sub_field( 'company' ); ?></div>
+										</div>
 									</div>
-								<?php } ?>
+								<?php endwhile; ?>
 							</div>
-						<?php } ?>
-					</div>
-				<?php
-				endif;
-				
-				$left  = get_field( 'portfolio_contact_left' );
-				$right = get_field( 'portfolio_contact_right' );
-				if ( $left || $right ):
-					?>
-					<h2 id="contact">Contact</h2>
-					<div class="portfolio-contact">
-						<div class="contact-details"><?php echo $left; ?></div>
-						<div class="contact-form"><?php echo $right; ?></div>
-					</div>
-				<?php endif; ?>
+						<?php endif; ?>
+						
+						<div id="portfolio" class="portfolio-projects">
+							<?php if ( have_rows( 'portfolio_highlights' ) ): ?>
+								<h2>Portfolio</h2>
+								<div class="projects-wrapper">
+									<?php while( have_rows( 'portfolio_highlights' ) ) : the_row(); ?>
+										<div class="portfolio-project">
+											<?php
+											$image = get_sub_field( 'thumbnail' );
+											$url   = get_sub_field( 'url' );
+											$host  = parse_url( $url )['host'];
+											if ( substr( $host, 0, 4 ) == 'www.' ) {
+												$host = substr( $host, 4 );
+											}
+											?>
+											<div class="project-top">
+												<div class="project-thumb">
+													<?php if ( $cheapskate ): ?>
+														<img src="https://loremflickr.com/400/280" />
+													<?php else: ?>
+														<img src="<?php echo $image['url']; ?>" alt="<?php the_sub_field( 'title' ); ?>" />
+													<?php endif; ?>
+												</div>
+												<div class="project-details">
+													<a target="_blank" class="vertical-center" href="<?php echo $url; ?>" rel="nofollow external"><?php echo $host; ?> &rarr;</a>
+												</div>
+											</div>
+											<div class="project-desc">
+												<h3><a target="_blank" href="<?php echo $url; ?>" rel="nofollow external"><?php the_sub_field( 'title' ); ?></a></h3>
+												<p><?php the_sub_field( 'description' ); ?></p>
+											</div>
+										</div>
+									<?php endwhile; ?>
+									<div class="portfolio-project empty">
+									</div>
+								</div>
+							<?php endif; ?>
+							
+							<?php if ( get_field( 'additional_websites' ) ): ?>
+								<div class="more-projects-wrapper">
+									<h3>Other Websites</h3>
+									<div class="portfolio-more-projects">
+										<?php the_field( 'additional_websites' ); ?>
+									</div>
+								</div>
+							<?php endif; ?>
+						
+						</div>
+						
+						<?php
+						if ( have_rows( 'education' ) ):
+							echo '<h2 id="education">Education</h2>';
+							output_employment_education( 'education' );
+						endif;
+						
+						if ( get_field( 'portfolio_personal' ) ):
+							?>
+							<h2 id="personal">Personal</h2>
+							<div class="portfolio-personal">
+								<?php if ( have_rows( "portfolio_personal_events" ) ) : ?>
+									<div class="personal-events">
+										<?php while( have_rows( "portfolio_personal_events" ) ) : the_row(); ?>
+											<div class="personal-event">
+												<h3><?php the_sub_field( 'year' ); ?></h3>
+												<div class="desc"><?php the_sub_field( 'desc' ); ?></div>
+											</div>
+										<?php endwhile; ?>
+									</div>
+								<?php
+								endif;
+								the_field( 'portfolio_personal' );
+								?>
+							</div>
+						<?php
+						endif;
+						
+						$left  = get_field( 'portfolio_contact_left' );
+						$right = get_field( 'portfolio_contact_right' );
+						if ( $left || $right ):
+							?>
+							<h2 id="contact">Contact</h2>
+							<div class="portfolio-contact">
+								<div class="contact-details"><?php echo $left; ?></div>
+								<div class="contact-form"><?php echo $right; ?></div>
+							</div>
+						<?php endif; ?>
+					<?php endif; ?>
+				</div>
 			
-			<?php endif; ?>
-		</div>
+			</article>
+		
+		</main>
+		
+		<?php
+		if ( apply_filters( "sidebar_enabled", true ) ) {
+			get_sidebar();
+		}
+		?>
 	
-	</article>
-
-<?php get_sidebar(); ?>
+	</div>
 
 <?php
 get_footer();

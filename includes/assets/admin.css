@@ -1,0 +1,52 @@
+/* ==========
+Advanced Custom Fields
+========== */
+
+/* Photoshop-like transparency grid background for image uploads */
+.acf-image-uploader img {
+	min-width: 0;
+	min-height: 0;
+	background-size: 16px 16px;
+	background-color: #fefefe;
+	background-image: linear-gradient(45deg, #d5d5d5 25%, transparent 25%, transparent 75%, #d5d5d5 75%, #d5d5d5),
+	linear-gradient(45deg, #d5d5d5 25%, transparent 25%, transparent 75%, #d5d5d5 75%, #d5d5d5);
+	background-position: 4px 4px, 12px 12px;
+}
+
+/* Fix layout issue of message descriptions when using left-aligned labels */
+.acf-field-message td.acf-input > :first-child {
+	margin-top: 0;
+}
+
+.acf-field-message td.acf-input > :last-child {
+	margin-bottom: 0;
+}
+
+/* ==========
+General WordPress
+========== */
+
+/* Fix the admin dashboard displaying oddly in Chrome 45 */
+#adminmenu {
+	transform: translateZ(0);
+}
+
+/* Allow checkbox lists to be resized vertically. Great for viewing many categories when editing a page, or editing menus within appearance > menus */
+.categorydiv div.tabs-panel,
+.customlinkdiv div.tabs-panel,
+.posttypediv div.tabs-panel,
+.taxonomydiv div.tabs-panel,
+.wp-tab-panel {
+	max-height: none;
+	resize: vertical;
+	height: 200px;
+}
+
+/* prettify the Media Settings page */
+.options-media-php #thumbnail_crop, label[for="thumbnail_crop"] {
+	display: none;
+}
+
+.options-media-php h1::after {
+	content: " (Developer Use Only)";
+}

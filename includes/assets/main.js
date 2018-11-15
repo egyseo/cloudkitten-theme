@@ -1,12 +1,16 @@
 jQuery(function () {
 
-	// meh
-	//init_back_to_top();
+	init_back_to_top();
 
 	init_sticky_portfolio_menu();
 
 	init_faux_animated_gif();
 
+	// Enable mobile nav menu
+	init_mobile_button('.mobile-menu-button', '#mobile-nav', '.mobile-menu', 'mobile_nav_open');
+
+	// Enables ajax pagination on archive and search results pages
+	init_ajax_pagination();
 });
 
 function init_faux_animated_gif() {
@@ -31,6 +35,7 @@ function init_faux_animated_gif() {
 	}
 }
 
+
 function init_back_to_top() {
 	var $backToTop = jQuery("#back-to-top");
 	if ( $backToTop.length ) {
@@ -38,7 +43,24 @@ function init_back_to_top() {
 			e.preventDefault();
 			scroll_to_position({ scrollTop: 0 });
 		});
+
+		var $html = jQuery('html');
+
+		var show_back_to_top = function () {
+			var pageH = $html.outerHeight(true);
+			var scrollH = $html[0].scrollHeight;
+			if ( scrollH > pageH ) {
+				$backToTop.show();
+			} else {
+				$backToTop.hide();
+			}
+		};
+
+		// on page load and resize, check if this should be visible
+		show_back_to_top();
+		jQuery(window).smartresize(show_back_to_top);
 	}
+
 }
 
 function init_sticky_portfolio_menu() {
@@ -50,7 +72,7 @@ function init_sticky_portfolio_menu() {
 
 		var pastAnchors;
 		var anchorFixed = false;
-		var topOfPageAnchors = $pageAnchors.next().offset().top - $pageAnchors.height() - 15;
+		var topOfPageAnchors = updateTopOfPageAnchors();
 		var $adminBar = jQuery("#wpadminbar");
 		var adminBar = jQuery("body").hasClass("admin-bar");
 
@@ -58,27 +80,29 @@ function init_sticky_portfolio_menu() {
 		var $pageAnchorDestinations = $pageAnchorLinks.map(function () {
 			return jQuery(jQuery(this).attr("href"));
 		}).get();
+
+		var viewportHeight = jQuery(window).height();
 		var pageAnchorPositions = [];
 		jQuery.each($pageAnchorDestinations, function () {
-			pageAnchorPositions.push(jQuery(this).offset().top);
+			pageAnchorPositions.push(jQuery(this).offset().top - viewportHeight / 4);
 		});
 
 		// adds/removes a body class to disable everything on small screens
 		var pageAnchorsEnabled = true;
-		var updateBodyClass = function () {
+
+		function updateBodyClass() {
 			if ( jQuery(window).width() < 700 ) {
 				pageAnchorsEnabled = false;
 				jQuery("body").addClass("hide-page-anchors");
-				console.log("hiding anchors");
 			} else {
+				pageAnchorsEnabled = true;
 				jQuery("body").removeClass("hide-page-anchors");
-				console.log("unhiding anchors");
 			}
-		};
+		}
 
 		// adds or removes "fixed" class from pageAnchors
 		// set to true for minor performance benefit when scrolling
-		var updateAnchorClass = function ( ignoreAnchorFixed ) {
+		function updateAnchorClass( ignoreAnchorFixed ) {
 
 			var pos = jQuery(window).scrollTop();
 
@@ -111,14 +135,20 @@ function init_sticky_portfolio_menu() {
 				$pageAnchorLinks.removeClass("active");
 			}
 
-		};
+		}
 
-		var updateAnchorClassOnScroll = function () {
+		function updateAnchorClassOnScroll() {
 			// don't do anything if the anchors aren't displaying
 			if ( pageAnchorsEnabled ) {
 				updateAnchorClass(false);
 			}
-		};
+		}
+
+		function updateTopOfPageAnchors() {
+			// don't use the page anchor offset directly because it won't work when they're fixed
+			// subtracting 50 accounts for the margins and really shouldn't be hardcoded but here it is
+			return $pageAnchors.next().offset().top - $pageAnchors.height() - 50;
+		}
 
 
 		// EVENT HANDLERS
@@ -134,7 +164,6 @@ function init_sticky_portfolio_menu() {
 			if ( adminBar ) {
 				adjust += $adminBar.height();
 			}
-
 
 			// unbind scroll event while scrolling
 			jQuery(window).off("scroll", updateAnchorClassOnScroll);
@@ -154,12 +183,12 @@ function init_sticky_portfolio_menu() {
 		// update anchor on resize
 		jQuery(window).smartresize(function () {
 			updateBodyClass();
+			topOfPageAnchors = updateTopOfPageAnchors();
 
-			topOfPageAnchors = $pageAnchors.next().offset().top - $pageAnchors.height() - 15;
-
+			viewportHeight = jQuery(window).height();
 			pageAnchorPositions = [];
 			jQuery.each($pageAnchorDestinations, function () {
-				pageAnchorPositions.push(jQuery(this).offset().top);
+				pageAnchorPositions.push(jQuery(this).offset().top - viewportHeight / 4);
 			});
 
 			updateAnchorClass(true);
@@ -258,4 +287,135 @@ function scroll_to_position( options ) {
 		width: 200
 	};
 })(jQuery);
+
+
+function init_mobile_button( button_selector, navigation_selector, inner_nav_selector, body_class ) {
+	if ( typeof button_selector === 'undefined' || typeof navigation_selector === 'undefined' || !button_selector || !navigation_selector ) return;
+
+	var $nav = jQuery(navigation_selector);
+	var $button = jQuery(button_selector);
+
+	if ( $button.length < 1 || $nav.length < 1 ) {
+		return;
+	}
+
+	var $html = jQuery('html');
+	var $body = jQuery('body');
+	var $inner = $nav.find(inner_nav_selector);
+
+	// button click toggles nav
+	$button.click(function () {
+		// Close any open submenus
+		$nav.find('li.sub-menu-open').removeClass('sub-menu-open');
+
+		if ( $body.hasClass(body_class) ) {
+			// reset scroll position of .site-container while it's fixed in place
+			$html.add($body).scrollTop(0);
+		} else {
+			var pageH = $html.outerHeight(true);
+			var scrollH = $html[0].scrollHeight;
+
+			if ( scrollH > pageH ) {
+				// if the page had a scrollbar before menu opened, keep it whether or not menu requires it
+				$body.addClass('require_scrollbar');
+			} else {
+				$body.removeClass('require_scrollbar');
+			}
+		}
+
+		// Toggle the mobile nav menu
+		$body.toggleClass(body_class);
+
+		return false;
+	});
+
+	// clicking outside of the menu closes it
+	$nav.click(function ( e ) {
+		if ( e.target !== $inner[0] && !$inner.find(e.target).length ) {
+			$button.trigger("click");
+			return false;
+		}
+	});
+
+	// pressing esc closes it
+	jQuery(document).keyup(function ( e ) {
+		if ( e.key === "Escape" && $body.hasClass(body_class) ) {
+			$button.trigger("click");
+			return false;
+		}
+	});
+
+
+	$nav.find(".menu-item-has-children").append('<div class="menu-dropdown-toggle"></div>');
+	$nav.on('click', '.menu-dropdown-toggle', function () {
+		var $link = jQuery(this);
+		var $item = $link.parent('li.menu-item');
+		var $submenu = $item.children('ul.sub-menu:first');
+
+		if ( $submenu.length > 0 ) {
+			// Collapse sibling menus if they are open, as well as their children.
+			$item.siblings('li.menu-item.sub-menu-open').each(function () {
+				jQuery(this).removeClass('sub-menu-open');
+				jQuery(this).find('li.menu-item.sub-menu-open').removeClass('sub-menu-open');
+			});
+
+			// Collapse or expand the clicked menu as needed.
+			$item.toggleClass('sub-menu-open');
+
+			return false;
+		}
+	});
+}
+
+function init_ajax_pagination() {
+
+	if ( !jQuery(".loop-pagination").length ) return;
+
+	var $main = jQuery("#main");
+
+	// save current page as state
+	history.replaceState({
+		pageTitle: document.title,
+		pageContent: $main.html()
+	}, '', window.location.pathname + window.location.search);
+
+	// update results on click of pagination links
+	jQuery(document).on("click", ".loop-pagination a", function ( e ) {
+
+		e.preventDefault();
+		$main.addClass('ajax-loading');
+		var urlToLoad = jQuery(this).attr("href");
+
+		jQuery.ajax({
+			type: 'POST',
+			dataType: 'json',
+			url: urlToLoad,
+			data: { ajax: 1 }
+		})
+			.done(function ( json ) {
+				$main
+					.html(json.content)
+					.removeClass('ajax-loading');
+				document.title = json.title;
+				if ( $main.offset().top < jQuery(window).scrollTop() ) {
+					// top of $main is hidden above top of window; scroll up
+					jQuery('html, body').animate({ scrollTop: $main.offset().top }, 200);
+				}
+				history.pushState({
+					pageTitle: json.title,
+					pageContent: json.content
+				}, '', urlToLoad);
+			})
+			.fail(function () {
+				window.location.href = urlToLoad;
+			});
+	});
+
+	// update results on history change
+	window.onpopstate = function ( e ) {
+		$main.html(e.state.pageContent);
+		document.title = e.state.pageTitle;
+	};
+
+}
 

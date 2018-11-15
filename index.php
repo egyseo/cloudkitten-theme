@@ -1,37 +1,46 @@
 <?php
-if ( !have_posts() ) {
-    get_template_part('404');
-    return;
+
+// handles ajax requests for paginated post archives
+if ( isset( $_POST['ajax'] ) ) {
+	include( 'ajax.php' );
+	exit;
 }
 
 get_header();
-
-the_post();
 ?>
 
-<article <?php post_class('loop-single'); ?>>
+	<div class="inside site-content">
+		<main id="main">
+			<?php
+			
+			// Single post/pages and non-empty archives
+			if ( have_posts() ) :
+				if ( is_singular() ) : the_post();
+					get_template_part( 'templates/loop/single', get_post_type() );
+				else:
+					get_template_part( 'templates/parts/header-archive', get_post_type() );
+					while ( have_posts() ) : the_post();
+						get_template_part( 'templates/loop/archive', get_post_type() );
+					endwhile;
+					get_template_part( 'templates/parts/pagination-archive', get_post_type() );
+				endif;
 
-    <header class="loop-header">
-        <?php the_title( '<h1 class="loop-title">', '</h1>' ); ?>
-    </header>
+			// Empty archives
+			else: the_post();
+				get_template_part( 'templates/parts/header-archive', get_post_type() );
+				get_template_part( 'templates/parts/empty-archive', get_post_type() );
+			endif;
 
-    <div class="loop-body">
+			?>
+		</main>
 
-        <?php if ( has_post_thumbnail() ) { ?>
-            <div class="loop-image">
-                <a href="<?php the_permalink(); ?>"><?php the_post_thumbnail( ); ?></a>
-            </div>
-        <?php } ?>
+		<?php
+		if ( apply_filters( "sidebar_enabled", true ) ) {
+			get_sidebar();
+		}
+		?>
 
-        <div class="loop-content">
-            <?php the_content(); ?>
-        </div>
-
-    </div>
-
-</article>
-
-<?php get_sidebar(); ?>
+	</div>
 
 <?php
 get_footer();
