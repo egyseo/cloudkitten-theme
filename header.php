@@ -55,11 +55,16 @@
 	<header id="masthead" class="site-header">
 		<div class="inside"<?php the_field( 'header-inside', 'options' ); ?>>
 			<div class="logo">
+				
+				<?php if ( shortcode_exists( 'rl_alert_tag' ) ) {
+					echo do_shortcode( '[rl_alert_tag]' );
+				}; ?>
+				
 				<a href="<?php echo site_url(); ?>">
 					<picture>
 						<img src="<?php echo get_template_directory_uri(); ?>/includes/images/logo_horiz.min.svg" alt="Logo" />
 					</picture>
-					
+				
 				</a>
 			</div>
 			
@@ -67,7 +72,7 @@
 			
 			
 			// Primary Menu
-			if ( has_nav_menu('header_primary') ) {
+			if ( has_nav_menu( 'header_primary' ) ) {
 				$args = array(
 					'theme_location' => 'header_primary',
 					'menu'           => 'Header - Primary',
@@ -78,12 +83,12 @@
 				);
 				
 				echo '<nav class="nav-menu nav-header nav-primary">';
-				wp_nav_menu($args);
+				wp_nav_menu( $args );
 				echo '</nav>';
 			}
 			
 			// Secondary Menu
-			if ( has_nav_menu('header_secondary') ) {
+			if ( has_nav_menu( 'header_secondary' ) ) {
 				$args = array(
 					'theme_location' => 'header_secondary',
 					'menu'           => 'Header - Secondary',
@@ -94,14 +99,19 @@
 				);
 				
 				echo '<nav class="nav-menu nav-header nav-secondary">';
-				wp_nav_menu($args);
+				wp_nav_menu( $args );
 				echo '</nav>';
 			}
 			?>
-			
+		
 		</div>
 	</header><!-- #masthead -->
 	
+	<?php if ( shortcode_exists( 'rl_alerts' ) ) {
+		echo do_shortcode( '[rl_alerts]' );
+	}; ?>
 	
-	<div id="content"<?php if ( apply_filters( "sidebar_enabled", true ) ) {echo ' class=" has-sidebar"';} ?>>
+	<div id="content"<?php if ( apply_filters( "sidebar_enabled", true ) ) {
+		echo ' class=" has-sidebar"';
+	} ?>>
 	

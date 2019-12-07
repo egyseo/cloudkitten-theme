@@ -60,7 +60,7 @@ echo '</pre>';
 				);
 				
 				echo '<nav class="nav-menu nav-footer nav-secondary">';
-				echo '<h2>Adventures</h2>';
+				echo '<h2><a href="', get_permalink( 7 ), '">Excursions</a></h2>';
 				wp_nav_menu( $args );
 				echo '</nav>';
 			}

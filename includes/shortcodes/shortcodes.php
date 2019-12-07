@@ -27,24 +27,32 @@ function show_confirmation_or_gform_fun( $atts, $content = null ) {
 add_shortcode( 'show_confirmation_or_gform', 'show_confirmation_or_gform_fun' );
 
 
-// gallery wrapper to make the aquoid parameters consistent
+// gallery wrapper to make things consistent
 function ck_gallery_fun( $atts ) {
 	$a = shortcode_atts( array(
-		'album_id' => '',
+		'album_id'     => '',
+		'thumb_height' => 250,
 	), $atts );
-	if ( $a['album_id'] ) {
-		ob_start();
+	
+	ob_start();
+	
+	if ( $a['album_id'] && function_exists( "rl_gphotos_shortcode_fun" ) ) {
 		?>
 		<div class="inside wide photo-gallery">
 			<h2>Photos</h2>
-			<?php echo do_shortcode( "[gallery type='google' view='photos' album_id='" . $a['album_id'] . "' count='25' more='Load More' main_size='1600' tile_size='470' layout='random']" ); ?>
+			<?php
+			echo rl_gphotos_shortcode_fun(
+				array(
+					'album_id'     => $a['album_id'],
+					'thumb_height' => $a['thumb_height'],
+				)
+			);
+			?>
 		</div>
 		<?php
-		return ob_get_clean();
 	}
+	
+	return ob_get_clean();
 }
 
 add_shortcode( 'ck_gallery', 'ck_gallery_fun' );
-
-
-

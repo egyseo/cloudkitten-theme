@@ -10,7 +10,7 @@ jQuery(function () {
 	init_mobile_button('.mobile-menu-button', '#mobile-nav', '.mobile-menu', 'mobile_nav_open');
 
 	// Enables ajax pagination on archive and search results pages
-	init_ajax_pagination();
+	//init_ajax_pagination();
 });
 
 function init_faux_animated_gif() {

@@ -11,7 +11,7 @@ if ( isset( $_POST['ajax'] ) ) {
 
 get_header();
 ?>
-	
+	<!-- lost the game -->
 	<div class="site-content">
 		<main id="main">
 			<article <?php post_class( 'loop-single' ); ?>>

@@ -16,11 +16,13 @@ function ck_make_valid_breadcrumbs( $link_output ) {
 add_filter( 'wpseo_breadcrumb_output', 'ck_make_valid_breadcrumbs' );
 
 // pretend this page doesn't exist while I decide what to do with it
-function ck_hide_adventures_page_temp( $link_output ) {
+function ck_hide_excursions_page_temp( $link_output ) {
 	$link_output = str_replace( '/adventures/', '/about/', $link_output );
 	$link_output = str_replace( 'Adventures', 'About', $link_output );
+	$link_output = str_replace( '/excursions/', '/about/', $link_output );
+	$link_output = str_replace( 'Excursions', 'About', $link_output );
 	
 	return $link_output;
 }
 
-add_filter( 'wpseo_breadcrumb_output', 'ck_hide_adventures_page_temp' );
+add_filter( 'wpseo_breadcrumb_output', 'ck_hide_excursions_page_temp' );

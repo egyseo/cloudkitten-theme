@@ -1,6 +1,6 @@
 <?php
 
-add_filter( 'gform_pre_send_email', 'before_email' );
+//add_filter( 'gform_pre_send_email', 'before_email' );
 function before_email( $email ) {
 	$email['subject'] = $email['subject'] ? : 'Website inquiry';
 	return $email;

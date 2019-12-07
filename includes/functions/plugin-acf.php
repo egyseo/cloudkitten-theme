@@ -36,9 +36,9 @@ acf_add_options_sub_page(array(
 ));
 acf_add_options_sub_page(array(
 	'parent' => $theme_settings['menu_slug'],
-	'page_title' => 'Adventures',
-	'menu_title' => 'Adventures',
-	'menu_slug' => 'theme-options-adventures',
+	'page_title' => 'Excursions',
+	'menu_title' => 'Excursions',
+	'menu_slug' => 'theme-options-excursions',
 	'autoload'   => true
 ));
 

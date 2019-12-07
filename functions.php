@@ -18,23 +18,18 @@ function theme_scripts() {
 	$theme_version = $theme->get( 'Version' );
 	
 	wp_enqueue_style( get_stylesheet(), get_stylesheet_uri(), array(), $theme_version );
-	wp_enqueue_script( 'imagesloaded', 'https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js', array( 'jquery' ), null, true );
 	wp_enqueue_script( 'main', get_template_directory_uri() . '/includes/assets/main.js', array( 'jquery', 'imagesloaded' ), $theme_version, true );
-	
-	// Google Fonts
-	wp_enqueue_style( 'gfonts', '//fonts.googleapis.com/css?family=Lato:400,400i,700' );
 }
 
 add_action( 'wp_enqueue_scripts', 'theme_scripts' );
 
 function theme_admin_scripts() {
-	// Google Fonts
-	wp_enqueue_style( 'gfonts', '//fonts.googleapis.com/css?family=Lato:400,400i,700' );
-	add_editor_style( '//fonts.googleapis.com/css?family=Lato:400,400i,700' );
+	//// Google Fonts
+	//wp_enqueue_style( 'gfonts', '//fonts.googleapis.com/css?family=Lato:400,400i,700' );
+	//add_editor_style( '//fonts.googleapis.com/css?family=Lato:400,400i,700' );
 }
 
 add_action( 'admin_enqueue_scripts', 'theme_admin_scripts' );
-
 
 
 function theme_setup() {
@@ -49,7 +44,7 @@ function theme_setup() {
 		//'header_primary'   => 'Header - Primary',
 		//'header_secondary' => 'Header - Secondary',
 		
-		'footer_primary' => 'Footer - Primary',
+		'footer_primary'   => 'Footer - Primary',
 		'footer_secondary' => 'Footer - Secondary',
 		
 		'mobile_primary' => 'Mobile - Primary',
@@ -83,7 +78,7 @@ function theme_setup() {
 	
 	// 5. Shortcodes
 	include_once 'includes/shortcodes/shortcodes.php';
-	include_once 'includes/shortcodes/adventure_gallery.php';
+	include_once 'includes/shortcodes/excursion_gallery.php';
 }
 
 add_action( 'after_setup_theme', 'theme_setup' );

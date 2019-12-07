@@ -35,3 +35,12 @@ function ck_custom_archive_title( $title ) {
 
 add_filter( 'get_the_archive_title', 'ck_custom_archive_title', 10, 2 );
 
+
+// remove prefix on private/protected page titles
+
+function ck_private_title_format( $format ) {
+	return '%s';
+}
+
+add_filter( 'private_title_format', 'ck_private_title_format' );
+add_filter( 'protected_title_format', 'ck_private_title_format' );
